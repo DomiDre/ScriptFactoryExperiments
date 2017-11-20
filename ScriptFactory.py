@@ -1,7 +1,7 @@
 import numpy as np
 import sys, os, datetime, glob, importlib
-from logger import Logger
-from experiment import Experiment
+from Logger import Logger
+from Experiment import Experiment
 
 class ScriptFactory():
     def __init__(self):

@@ -1,4 +1,4 @@
-from experiment import Experiment
+from Experiment import Experiment
 import os
 
 class Experiment(Experiment):
