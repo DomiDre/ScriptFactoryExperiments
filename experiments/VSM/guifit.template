@@ -1,0 +1,39 @@
+from PyQt5.QtWidgets import QApplication
+from SliderApp.slider_fit_app import SliderFitApp
+from SliderApp.slider_vsm import cPlotAndFitVSM
+
+import numpy as np
+import sys, lmfit
+from VSM.VSMmodels import vsm_magnetization_functions as vsmmodel
+
+class GuiApp(cPlotAndFit):
+    def init_data(self):
+    
+        self.data_path = {{datfile}}
+        self.modelfile = {{savefile}}
+
+        vsmdata = np.loadtxt(self.data_path)
+        self.x = vsmdata[:,0]
+        self.y = vsmdata[:,1]
+        self.sy = vsmdata[:,2]
+        
+        # valid_data = np.logical_and(self.x > -1, self.x <1 ) 
+        # self.x = self.x[valid_data]
+        # self.y = self.y[valid_data]
+        # self.sy = self.sy[valid_data]
+        
+
+        self.p = lmfit.Parameters()
+        self.p.add("Ms", 28.5626749042, min = 0, max = 500, vary = True)
+        self.p.add("xi", 12.6393220621, min = 1e-10, max = 50, vary = True)
+        self.p.add("chi", 27.9783173537, min = 0, max = 50, vary = True)
+        self.ymodel = self.get_model(self.p, self.x)
+
+    def get_model(self, p, x):
+        return vsmmodel.langevin_function(x, p["Ms"], p["xi"]) + p["chi"]*x
+        
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    aw = SliderFitApp(GuiApp)
+    aw.show()
+    app.exec_()
