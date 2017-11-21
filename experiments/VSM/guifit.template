@@ -6,7 +6,7 @@ import numpy as np
 import sys, lmfit
 from VSM.VSMmodels import vsm_magnetization_functions as vsmmodel
 
-class GuiApp(cPlotAndFit):
+class GuiApp(cPlotAndFitVSM):
     def init_data(self):
     
         self.data_path = {{datfile}}
@@ -17,16 +17,18 @@ class GuiApp(cPlotAndFit):
         self.y = vsmdata[:,1]
         self.sy = vsmdata[:,2]
         
-        # valid_data = np.logical_and(self.x > -1, self.x <1 ) 
+        # valid_data = np.logical_and(-1 < self.x, self.x < 1) 
         # self.x = self.x[valid_data]
         # self.y = self.y[valid_data]
         # self.sy = self.sy[valid_data]
         
-
+        Ms =
+        xi =
+        chi =
         self.p = lmfit.Parameters()
-        self.p.add("Ms", 28.5626749042, min = 0, max = 500, vary = True)
-        self.p.add("xi", 12.6393220621, min = 1e-10, max = 50, vary = True)
-        self.p.add("chi", 27.9783173537, min = 0, max = 50, vary = True)
+        self.p.add("Ms",Ms, min = 0, max = 500, vary = True)
+        self.p.add("xi",xi, min = 0, max = 50, vary = True)
+        self.p.add("chi",chi, min = -50, max = 50, vary = True)
         self.ymodel = self.get_model(self.p, self.x)
 
     def get_model(self, p, x):

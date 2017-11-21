@@ -1,11 +1,10 @@
 import os
 
 class Experiment():
-    def __init__(self, parent, arguments, savepath):
+    def __init__(self, parent, arguments):
         self.parent = parent
         self.arguments = arguments
         self.Nargs = len(self.arguments)
-        self.savepath = savepath
 
     def check_assertion(self, cond, error_message):
         self.parent.check_assertion(cond, error_message, self.error_help)
@@ -33,8 +32,8 @@ class Experiment():
         print('')
         print('Usage script factory: ScriptFactory.py EXPERIMENT TEMPLATEFILE [additional arguments]')
 
-    def save_template_to_file(self):
-        savepath = self.savepath
+    def save_template_to_file(self, savepath):
+        self.savepath = savepath
 
         write_file = True
         if os.path.isfile(savepath):

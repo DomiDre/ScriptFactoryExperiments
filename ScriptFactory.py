@@ -25,24 +25,29 @@ class ScriptFactory():
         self.check_assertion(os.path.isdir(self.experiment_path),\
                              'Specified experiment folder does not exist.')
 
+
         # Generate Experiment object.
         # If new definition of Experiment is in path use that, otherwise use default
         try:
             self.experiment = getattr(importlib.import_module('experiments.'+\
                               self.arg_experiment + '.experiment'),\
-                              'Experiment')(self, self.additional_arguments,\
-                                            self.save_template_to)
+                              'Experiment')(self, self.additional_arguments)
             self.log.comment('Using experiment.py from '+self.arg_experiment+\
                              ' folder to generate script.')
         except ModuleNotFoundError:
-            self.experiment = Experiment(self, self.additional_arguments,\
-                                         self.save_template_to)
+            self.experiment = Experiment(self, self.additional_arguments)
             self.log.comment('Using default experiment.py to generate file '+\
                              'from template folder.')
     
+
+
         # Read desired template and save to file        
         self.experiment.read_template()
-        self.experiment.save_template_to_file()
+
+        # Read or generate a name for the saved script.
+        self.create_savefile_name()
+
+        self.experiment.save_template_to_file(self.save_template_to)
 
     def log_header(self):
         # Generate a header included in generated script
@@ -70,6 +75,7 @@ class ScriptFactory():
         self.additional_arguments = self.passed_args[2:]
         self.N_experiment_args = len(self.additional_arguments)
 
+    def create_savefile_name(self):
         # If name for saving is given as last argument use this one
         if self.N_experiment_args >= 2 and\
                 self.additional_arguments[-1].endswith('.py'):

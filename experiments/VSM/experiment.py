@@ -11,11 +11,9 @@ class Experiment(Experiment):
         print('\t--\tdatfile\t\t--\t.XYE file to load data from')
         print('\t--\tsavefile\t--\twhere to save fit results')
 
+        print('plot\t--\tUsing matplotlib to plot data + fit')
+        print('\t--\tdatfile\t\t--\t.XYE file to load data from')
+        print('\t--\tsavefile\t--\twhere to save fit results')
+
     def read_template(self):
         super().read_template()
-
-        if self.mode == 'guifit':
-            if self.Nargs > 1:
-                print(self.template)
-
-            print(self.template)
