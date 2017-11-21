@@ -47,6 +47,9 @@ class ScriptFactory():
         # Read or generate a name for the saved script.
         self.create_savefile_name()
 
+        # Replace {{}} args in template with additionally given arguments
+        self.experiment.replace_arguments_in_template()
+
         self.experiment.save_template_to_file(self.save_template_to)
 
     def log_header(self):
