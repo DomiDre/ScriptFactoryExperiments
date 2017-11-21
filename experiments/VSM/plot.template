@@ -1,7 +1,10 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-data = np.genfromtxt({{datfile}})
+datfile = '{{datfile}}'
+savefile = '{{savefile}}'
+
+data = np.genfromtxt(datfile)
 B = data[:, 0]
 M = data[:, 1]
 sM = data[:, 2]
@@ -25,10 +28,10 @@ ax.set_ylabel("$\mathit{M} \, / \, kAm^{-1}$")
 # mu = chi*k*T
 # smu = schi*k*T
 
-# ax.text(0.55, 0.1, "$M_s \, = \, "+str(Ms)+"("+ str(sMs)") \, kAm^{-1}$\n"+\
-#                   "$\mu \, = \, "+str(mu)+"("+ str(smu)") \,\cdot 10^3\mu_B$\n"+\
-#                   "$\chi \, = \,"+str(chi)+"("+ str(schi)") \,kAm^{-1}/T$\n"+\
-#                   "$M_{shift} \, = \, "+str(Moffset)+"("+ str(sMoffset)") \,kAm^{-1}$",\
+# ax.text(0.55, 0.1, "$M_s \, = \, "+str(Ms)+"("+ str(sMs)+") \, kAm^{-1}$\n"+\
+#                   "$\mu \, = \, "+str(mu)+"("+ str(smu)+") \,\cdot 10^3\mu_B$\n"+\
+#                   "$\chi \, = \,"+str(chi)+"("+ str(schi)+") \,kAm^{-1}/T$\n"+\
+#                   "$M_{shift} \, = \, "+str(Moffset)+"("+ str(sMoffset)+") \,kAm^{-1}$",\
 #         horizontalalignment='left',
 #         verticalalignment='bottom',\
 #         transform=ax.transAxes)
@@ -37,5 +40,5 @@ ax.set_xlim(-9.1, 9.1)
 ax.set_ylim(-420, 420)
 ax.legend(loc='upper left')
 fig.tight_layout()
-plt.savefig({{savefile}})
+plt.savefig(savefile)
 plt.show()

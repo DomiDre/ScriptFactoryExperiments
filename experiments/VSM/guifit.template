@@ -9,8 +9,8 @@ from VSM.VSMmodels import vsm_magnetization_functions as vsmmodel
 class GuiApp(cPlotAndFitVSM):
     def init_data(self):
     
-        self.data_path = {{datfile}}
-        self.modelfile = {{savefile}}
+        self.data_path = '{{datfile}}'
+        self.modelfile = '{{savefile}}'
 
         vsmdata = np.loadtxt(self.data_path)
         self.x = vsmdata[:,0]
