@@ -1,0 +1,92 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import lmfit, sys, os, datetime
+
+experimental_data_label = "SAXS @ GALAXI"
+model_label = 'Sphere Model'
+
+saxsdata = '{{saxsdata}}'
+slddata = '{{slddata}}'
+pngfile = '{{pngfile}}'
+
+bg = 0. # correct for constant background ?
+
+# Plot Limits
+q_min = 0.017
+q_max = 0.37
+I_min = 1e-4
+I_max = 3e3
+
+
+R, sR = 5.0, 1
+sigR, ssigR = 10, 1
+I0, sI0 = 0.21, 1
+
+
+# Load & Sort Experimental Data and Model from XYEM file
+loaded_file = np.genfromtxt(saxsdata)
+q = loaded_file[:, 0] # in A-1
+I_exp = loaded_file[:, 1]
+sI_exp = loaded_file[:, 2]
+I_model = loaded_file[:, 3]
+
+sorted_args = np.argsort(q)
+q = q[sorted_args]
+I_exp = I_exp[sorted_args]
+sI_exp = sI_exp[sorted_args]
+I_model = I_model[sorted_args]
+
+# Load the SLD of the model
+loaded_file = np.genfromtxt(slddata)
+r = loaded_file[:, 0]/10 # in A-1
+sld = loaded_file[:, 1]*1e6
+    
+# Transform Data for Plot
+I_exp -= bg
+I_model -= bg
+
+# Plot
+x0in = 0.55
+y0in = 0.65
+widthin = 1-x0in-0.01
+heightin= 1-y0in-0.01
+
+fig = plt.figure()
+axSAXS = fig.add_subplot(111)
+axSLD = fig.add_axes([x0in, y0in, widthin, heightin])
+
+axSLD.plot(r, sld, marker='None', color='black', lw=1)
+axSLD.set_xlabel("$\mathit{r} \,/\,nm$", fontsize=10)
+axSLD.set_ylabel(r"$SLD \, / \, 10^{-6} \AA^{-2}$", fontsize=10)
+axSLD.set_xticks([0, 2, 4, 6, 8])
+axSLD.set_yticks([0, 10, 20, 30, 40])
+axSLD.set_xlim([0, 9])
+axSLD.set_ylim([0, 45])
+axSLD.tick_params(axis='both', which='major', labelsize=10)
+
+axSAXS.errorbar(q, I_exp, sI_exp, marker='o', linestyle='None',
+             label=standard_label,
+             markersize=2, capsize=2, elinewidth=1, zorder=0)
+
+axSAXS.plot(q, I_model, marker='None', linestyle='-',
+         label=model_label, color='black', lw=1, zorder=1)
+
+axSAXS.text(0.05, 0.05,\
+            "$\mathit{R} \, = \,  "+str(R)+"("+ str(sR)+") \, nm$\n"+\
+            "$\mathit{\sigma_{R}} \, = \, "+str(sigR)+"("+ str(ssigR)+") \,\%$\n"+\
+            "$\mathit{I_0} \, = \,"+str(I0)+"("+ str(sI0)+") \,\cdot 10^{-8} \AA^{-3}$",\
+        horizontalalignment='left',
+        verticalalignment='bottom',\
+        transform=axSAXS.transAxes)
+
+axSAXS.set_xscale('log')
+axSAXS.set_yscale('log')
+axSAXS.set_xlabel("$\mathit{q}\,/\,\AA^{-1}$")
+axSAXS.set_ylabel("$\mathit{I}\,/\,cm^{-1}$")
+axSAXS.set_xlim([q_min, q_max])
+axSAXS.set_ylim([I_min, I_max])
+
+plt.savefig(pngfile)
+plt.show()
+
+        
