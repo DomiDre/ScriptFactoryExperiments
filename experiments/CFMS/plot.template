@@ -2,8 +2,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 from CFMS.cfms import CFMS
 
-datfile = {{datfile}}
-pngfilename = {{pngfilename}}
+datfile = '{{datfile}}'
+pngfilename = '{{pngfilename}}'
 
 cfms = CFMS()
 cfms.load(datfile)
