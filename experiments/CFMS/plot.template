@@ -1,0 +1,28 @@
+import matplotlib.pyplot as plt
+import numpy as np
+from CFMS.cfms import CFMS
+
+datfile = {{datfile}}
+pngfilename = {{pngfilename}}
+
+cfms = CFMS()
+cfms.load(datfile)
+B, M = cfms.get_BM()
+
+fig, ax = plt.subplots()
+ax.axhline(0, color='lightgray', marker='None', zorder=0)
+ax.axvline(0, color='lightgray', marker='None', zorder=0)
+ax.plot(B, M, linestyle='None', marker='.', zorder=1)
+ax.set_xlabel("$\mathit{\mu_0 H} \, / \, T$")
+ax.set_ylabel("$\mathit{M} \, / \, memu$")
+# ax.text(0.08, 0.80, 'T = 5 K',\
+#         horizontalalignment='left',
+#         verticalalignment='bottom',\
+#         transform=ax.transAxes)
+ax.set_xticks(np.arange(-9,10,3))
+ax.set_xlim(-9.2, 9.2)
+ax.set_ylim(-1.1, 1.1)
+ax.legend(loc='upper left')
+fig.tight_layout()
+plt.savefig(pngfilename)
+plt.show()
