@@ -13,8 +13,8 @@ bg = 0. # correct for constant background ?
 
 # Plot Limits
 q_min = 0.017
-q_max = 0.37
-I_min = 1e-4
+q_max = 0.3
+I_min = 3e-3
 I_max = 3e3
 
 
@@ -65,7 +65,7 @@ axSLD.set_ylim([0, 45])
 axSLD.tick_params(axis='both', which='major', labelsize=10)
 
 axSAXS.errorbar(q, I_exp, sI_exp, marker='o', linestyle='None',
-             label=standard_label,
+             label=experimental_data_label,
              markersize=2, capsize=2, elinewidth=1, zorder=0)
 
 axSAXS.plot(q, I_model, marker='None', linestyle='-',
