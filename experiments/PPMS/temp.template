@@ -1,0 +1,27 @@
+import matplotlib.pyplot as plt
+import numpy as np
+from PPMS.ppms import PPMS
+
+datfile = '{{datfile}}'
+pngfilename = '{{pngfilename}}'
+
+PPMS = PPMS()
+PPMS.load(datfile)
+T, M = PPMS.get_TM()
+
+fig, ax = plt.subplots()
+ax.axhline(0, color='lightgray', marker='None', zorder=0)
+ax.axvline(0, color='lightgray', marker='None', zorder=0)
+ax.plot(T, M, linestyle='None', marker='.', zorder=1, label='Sample')
+ax.set_xlabel("$\mathit{T} \, / \, K$")
+ax.set_ylabel("$\mathit{M} \, / \, memu$")
+ax.text(0.08, 0.88, '$\mathit{B} \, = \, 10 \, mT$',\
+        horizontalalignment='left',
+        verticalalignment='bottom',\
+        transform=ax.transAxes)
+ax.set_xlim(0, 350)
+ax.set_ylim(0, 100)
+ax.legend(loc='upper left')
+fig.tight_layout()
+plt.savefig(pngfilename)
+plt.show()
