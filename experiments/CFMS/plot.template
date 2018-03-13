@@ -15,7 +15,7 @@ ax.axvline(0, color='lightgray', marker='None', zorder=0)
 ax.plot(B, M, linestyle='None', marker='.', zorder=1, label='Sample')
 ax.set_xlabel("$\mathit{\mu_0 H} \, / \, T$")
 ax.set_ylabel("$\mathit{M} \, / \, memu$")
-ax.text(0.08, 0.88, '$\mathit{T} \, = \, 300 \, K',\
+ax.text(0.08, 0.88, '$\mathit{T} \, = \, 300 \, K$',\
         horizontalalignment='left',
         verticalalignment='bottom',\
         transform=ax.transAxes)

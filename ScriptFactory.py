@@ -91,7 +91,7 @@ class ScriptFactory():
 
             # Ask if that is ok. User can otherwise propose his own.
             check_savepath = input('Saving file to ['+self.save_template_to+\
-                                   ']. Specify other filename or press ENTER.')
+                                   ']. Specify other filename or just press ENTER: ')
             if not check_savepath.strip() in ['', 'y', 'Y', 'yes', 'Yes','YES',\
                                           'ok', 'j', 'J',]:
                 if not check_savepath.endswith('.py'): #Savefile must be a python file
