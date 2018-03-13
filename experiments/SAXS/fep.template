@@ -1,0 +1,11 @@
+from GALAXI.dd_saxs.dd_saxs import DDSAXS
+
+ssdd = {{ssdd_value}}
+ssdd_center = ({{center_x}}, {{center_y}})
+
+datfile = '{{datfile}}'
+pngfile = '{{pngfile}}'
+
+SAXS = DDSAXS()
+
+SAXS.eval_FEP('datfile', ssdd, ssdd_center, save=pngfile)

@@ -1,0 +1,17 @@
+from GALAXI.dd_saxs.dd_saxs import DDSAXS
+
+datfilename = '{{datfile}}'
+savefile = '{{savefile}}'
+positions = {'': ,\
+             '': ,\
+             '': ,\
+             '': ,\
+             '': ,\
+             '': ,\
+             '': ,\
+             '': ,\
+             '': ,\
+             '': ,\
+             '': }
+SAXS = DDSAXS()
+SAXS.eval_transmission(datfilename, positions, save=savefile)
