@@ -1,4 +1,4 @@
-import os, re
+import os, re, sys
 
 class Experiment():
     def __init__(self, parent, arguments):
