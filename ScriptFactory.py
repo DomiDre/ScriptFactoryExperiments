@@ -7,9 +7,8 @@ import sys, os, datetime, glob, importlib
 class ScriptFactory():
   def __init__(self):
     # Initialize global variables
-    self.version = 0.1
+    self.version = 0.2
     self.authors = [('Dominique Dresen', 'Dominique.Dresen@uni-koeln.de')]
-    self.minimum_num_passed_args = 2
     self.log = Logger()
 
     self.run_factory()
@@ -19,28 +18,9 @@ class ScriptFactory():
     
     self.get_arguments() # Get arguments from CL as well as the savepath
   
-    # Get and check path to folder containing templates
-    self.experiment_path = os.path.dirname(os.path.realpath(__file__))+\
-                '/experiments/'+self.arg_experiment
-    self.check_assertion(os.path.isdir(self.experiment_path),\
-               'Specified experiment folder does not exist.')
-
-
     # Generate Experiment object.
-    # If new definition of Experiment is in path use that, otherwise use default
-    try:
-      self.experiment = getattr(importlib.import_module('experiments.'+\
-                self.arg_experiment + '.experiment'),\
-                'Experiment')(self, self.additional_arguments)
-      self.log.comment('Using experiment.py from '+self.arg_experiment+\
-               ' folder to generate script.')
-    except ModuleNotFoundError:
-      self.experiment = Experiment(self, self.additional_arguments)
-      self.log.comment('Using default experiment.py to generate file '+\
-               'from template folder.')
-  
-
-
+    self.experiment = Experiment(self, self.additional_arguments)
+    
     # Read desired template and save to file    
     self.experiment.read_template()
 
@@ -68,19 +48,40 @@ class ScriptFactory():
       os.path.dirname(os.path.realpath(__file__))+'/experiments/')
     for exp in avail_experiments:
      print('\t'+exp)
-    
+  
+  def get_available_templates(self):
+    print('Available Templates are:')
+    available_files = os.listdir(self.experiment_path)
+    available_templates = []
+    for f in available_files:
+      if f.endswith('.template'):
+        available_templates.append(f.split('.template')[0])
+    for template in available_templates:
+     print('\t'+template)
+  
+
   def get_arguments(self):
     # Get arguments from CL
     self.passed_args = sys.argv
     self.N_passed_args = len(self.passed_args) - 1
     # At least 2 argument have to be passed
-    self.check_assertion(self.N_passed_args >= self.minimum_num_passed_args,\
-               'Specify Experiment and Template', self.get_available_experiments)
+    self.check_assertion(self.N_passed_args >= 1,\
+      'Specify Experiment and Template', self.get_available_experiments)
 
     # Experiment folders are always uppercase
     self.arg_experiment = self.passed_args[1].upper()
+    self.experiment_path = os.path.dirname(os.path.realpath(__file__))+\
+      '/experiments/'+self.arg_experiment
+
+    self.check_assertion(os.path.isdir(self.experiment_path),\
+      'Specified experiment folder does not exist.', self.get_available_experiments)
+
     self.log.comment('Preparing Script for Experiment: ' +\
              self.arg_experiment)
+
+    self.check_assertion(self.N_passed_args >= 2,\
+      "You didn't specify a template", self.get_available_templates)
+
     self.additional_arguments = self.passed_args[2:]
     self.N_experiment_args = len(self.additional_arguments)
 
