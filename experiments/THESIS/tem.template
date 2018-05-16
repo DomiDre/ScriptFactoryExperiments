@@ -1,0 +1,24 @@
+#Initialized ScriptFactory v0.1
+#Date: 2018-05-16 14:32:54.503659
+#Author(s)/Contact:
+#Dominique Dresen	 Dominique.Dresen@uni-koeln.de
+
+#Preparing Script for Experiment: THESIS
+#Using experiment.py from THESIS folder to generate script.
+import sys, os
+thesisimgs = os.environ['phdthesisimgs']
+cwd = sys.path[0]
+import matplotlib.pyplot as plt
+plt.style.use('phdthesis')
+
+from EM.tem import TEM
+
+temFilepath = cwd+"/{{tiffile}}"
+    
+temFFT = TEM()
+temFFT.load_tif_file(temFilepath)
+
+temFFT.pretty_plot(0, 0, 2048, 2048, 50)
+
+temFFT.fig.savefig(thesisimgs+'{{Chapter}}_tem_'+\
+                              '{{sampleName}}')
