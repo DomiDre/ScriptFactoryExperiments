@@ -1,0 +1,20 @@
+import sys, os
+thesisimgs = os.environ['phdthesisimgs']
+cwd = sys.path[0]
+import matplotlib.pyplot as plt
+plt.style.use('phdthesis')
+
+from EM.tem import TEM
+import glob
+
+files_in_folder = sorted(glob.glob('./*'))
+tem = TEM()
+tem.init_vm()
+for file in files_in_folder:
+  if(file.endswith('.tif')):
+    print(file)
+    tem.load_tif_file(file, init_vm=False, kill_vm_on_end=False)
+    tem.pretty_plot(0, 0, 2048, 2048, 50)
+
+    tem.fig.savefig('./'+file.replace('.tif', '.png'))
+tem.kill_vm()
