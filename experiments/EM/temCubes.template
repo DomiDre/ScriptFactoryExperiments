@@ -15,7 +15,8 @@ import numpy as np
 
 filepath = "{{tem_lenghts}}"
 sample_name = "{{sample_name}}"
-left_xlim, right_xlim = 6, 18
+left_xlim, right_xlim = 6, 17
+left, bottom = 0.14, 0.15
 tem = TEMCubes()
 tem.Nbins = 15
 lengths = tem.load_csv(filepath)
@@ -29,7 +30,7 @@ tem.export_fit_result(sample_name+"_size_dist.xy")
 
 #Plot Fit:
 fig = plt.figure()
-ax = fig.add_subplot(111)
+ax = fig.add_axes([left,bottom, 1-left-0.01, 1-bottom-0.01])
 
 ax.errorbar(tem.bins, tem.counts, tem.errors, color='darkgreen', ls='None')
 ax.hist(tem.raw_data, bins=tem.Nbins, alpha=0.7, facecolor='green')
@@ -51,4 +52,4 @@ ax.set_ylabel("$counts$")
 ax.set_xlim([left_xlim, right_xlim])
 ax.legend(loc='upper right')
 fig.tight_layout()
-fig.savefig(sample_name+'_size_dist.png', bbox_inches='tight')
+fig.savefig(sample_name+'_size_dist.png')
