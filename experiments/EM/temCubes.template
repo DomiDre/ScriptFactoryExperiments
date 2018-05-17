@@ -1,0 +1,27 @@
+import sys, os
+thesisimgs = os.environ['phdthesisimgs']
+cwd = sys.path[0]
+import matplotlib.pyplot as plt
+plt.style.use('phdthesis')
+
+from EM.tem import TEMCubes
+
+filepath = "{{tem_lenghts}}"
+sample_name = "{{sample_name}}"
+
+tem = TEMCubes()
+tem.Nbins = 15
+lengths = tem.load_xls(filepath)
+lengths *= 0.9049 # calibration correction factor
+tem.load(lengths)
+
+tem.prepare_length_histogram()
+tem.fit_lognormal(11, 0.1)
+tem.plot_lognormal(sample_name+"_size_dist.png")
+tem.export_fit_result(sample_name+"_size_dist.xy")
+
+
+tem.prepare_aspect_histogram()
+tem.fit_gaussian(1, 0.1)
+tem.plot_gaussian(sample_name+"_aspect_dist.png", mu_unit="", sigma_unit="")
+tem.export_fit_result(sample_name+"_aspect_dist.xy")
