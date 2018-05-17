@@ -21,4 +21,4 @@ temFFT.load_tif_file(temFilepath)
 temFFT.pretty_plot(0, 0, 2048, 2048, 50)
 
 temFFT.fig.savefig(thesisimgs+'{{Chapter}}_tem_'+\
-                              '{{sampleName}}')
+                              '{{sampleName}}', bbox_inches='tight')

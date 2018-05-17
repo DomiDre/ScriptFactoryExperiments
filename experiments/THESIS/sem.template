@@ -14,4 +14,4 @@ semFFT.load_tif_file(semFilepath)
 semFFT.pretty_plot(200, 200, 295, 250, 100)
 
 semFFT.fig.savefig(thesisimgs+'{{Chapter}}_SEM_'+\
-                              '{{sampleName}}')
+                              '{{sampleName}}', bbox_inches='tight')
