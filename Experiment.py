@@ -35,14 +35,13 @@ class Experiment():
                 self.template.append(line)
 
     def replace_arguments_in_template(self):
-        
         arg_list = self.arguments[1:] # get all arguments except mode
         if len(arg_list) > 0:
             if arg_list[-1].endswith('.py'): # remove template file name if its included
                 arg_list = arg_list[:-1]
             arg_list = arg_list[::-1] # inverse order to pop arguments from list
 
-            variable_pattern = re.compile(r'{{[a-zA-Z0-9]*}}') # search for {{}} pattern
+            variable_pattern = re.compile('{{[a-zA-Z0-9_]*}}') # search for {{}} pattern
             for i, line in enumerate(self.template):
                 if len(arg_list) == 0: # search is done if no more arguments are in list
                     break
