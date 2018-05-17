@@ -1,0 +1,102 @@
+import sys, os
+thesisimgs = os.environ['phdthesisimgs']
+cwd = sys.path[0]
+import matplotlib.pyplot as plt
+plt.style.use('phdthesis')
+
+import numpy as np
+import warnings
+from utils.fileformats import load_saxs_sans_sanspol, load_xyem
+from PlottingTemplates.saxssanssanspol import *
+# remove some annoying warnings
+warnings.filterwarnings("ignore", category=UserWarning, module='matplotlib')
+
+sample_name = '{{sample_name}}'
+Chapter = '{{Chapter}}'
+fitted_data_file = "SAXS_SANSPOL_"+sample_name+"_fit.dat"
+sld_file = "SAXS_SANSPOL_"+sample_name+"_sld.dat"
+magnetic_field = 1.2
+
+saxs_I_min, saxs_I_max = 5e-3, 5e3
+sans_I_min, sans_I_max = 3e-3, 25
+saxs_legend_label = "SAXS @ GALAXI"
+sans_legend_label = "SANS @ D33"
+sanspol_p_legend_label = "SANSPOL$(I+)$ @ D33"
+sanspol_m_legend_label = "SANSPOL$(I-)$ @ D33"
+
+saxs_pngfile = thesisimgs+Chapter+'_SAS_'+\
+                sample_name+"_SAXSFit.png"
+sans_pngfile = thesisimgs+Chapter+'_SAS_'+\
+                sample_name+"_SANSFit.png"
+sanspol_pngfile = thesisimgs+Chapter+'_SAS_'+\
+                sample_name+"_SANSPOLFit.png"
+
+#load sld
+z, saxs_sld, sans_sld_nuc, sans_sld_mag = load_xyem(sld_file)
+
+#load data, model
+data = load_saxs_sans_sanspol(fitted_data_file)
+saxs_q, saxs_I, saxs_sI, saxs_Imodel = data['saxs']
+sans_sa_q, sans_sa_I, sans_sa_sI, sans_sa_Imodel = data['sans sa']
+sans_la_q, sans_la_I, sans_la_sI, sans_la_Imodel = data['sans la']
+sanspol_p_sa_q, sanspol_p_sa_I, sanspol_p_sa_sI, sanspol_p_sa_Imodel =\
+  data['+ sanspol sa']
+sanspol_p_la_q, sanspol_p_la_I, sanspol_p_la_sI, sanspol_p_la_Imodel =\
+  data['+ sanspol la']
+sanspol_m_sa_q, sanspol_m_sa_I, sanspol_m_sa_sI, sanspol_m_sa_Imodel =\
+  data['- sanspol sa']
+sanspol_m_la_q, sanspol_m_la_I, sanspol_m_la_sI, sanspol_m_la_Imodel =\
+  data['- sanspol la']
+
+saxs_q_min, saxs_q_max = min(saxs_q), max(saxs_q)
+sans_q_min, sans_q_max = min(sans_sa_q), max(sans_la_q)
+
+#SAXS PLOT
+fig_saxs, ax_saxs, ax_sld_saxs = init_fig()
+sld_box(ax_sld_saxs, z, saxs_sld)
+
+errorbar_saxs(ax_saxs, saxs_q, saxs_I, saxs_sI, saxs_legend_label)
+model_saxs(ax_saxs, saxs_q, saxs_Imodel)
+
+setup_ax(ax_saxs, saxs_q_min, saxs_q_max, saxs_I_min, saxs_I_max)
+plt.savefig(saxs_pngfile)
+
+#SANS PLOT
+fig_sans, ax_sans, ax_sld_sans = init_fig()
+sld_box(ax_sld_sans, z, sans_sld_nuc,\
+        ylabel='SLD_n', yticks=[0, 2, 4, 6, 8], ylim=[0,9])
+
+errorbar_sans(ax_sans, sans_sa_q, sans_sa_I, sans_sa_sI, 'sa', sans_legend_label)
+errorbar_sans(ax_sans, sans_la_q, sans_la_I, sans_la_sI, 'la')
+model_sans(ax_sans, sans_sa_q, sans_sa_Imodel, 'sa')
+model_sans(ax_sans, sans_la_q, sans_la_Imodel, 'la')
+
+setup_ax(ax_sans, sans_q_min, sans_q_max, sans_I_min, sans_I_max)
+plt.savefig(sans_pngfile)
+
+#SANSPOL Plot
+fig_sanspol, ax_sanspol, ax_sld_sanspol = init_fig()
+sld_box(ax_sld_sanspol, z, sans_sld_mag,\
+        ylabel='SLD_m', yticks=[0, 0.5, 1], ylim=[0,1.2])
+
+sans_minI = min(min(sans_sa_I), min(sans_la_I))
+sans_maxI = max(max(sans_sa_I), max(sans_la_I))
+
+ax_sanspol.plot([], [], marker='None', ls='None',\
+  label="$\mathit{B}\,=\,"+str(magnetic_field)+"\,T$")
+errorbar_sanspol(ax_sanspol, sanspol_p_sa_q, sanspol_p_sa_I, sanspol_p_sa_sI,\
+                 'p', 'sa', sanspol_p_legend_label)
+errorbar_sanspol(ax_sanspol, sanspol_p_la_q, sanspol_p_la_I, sanspol_p_la_sI,\
+                 'p', 'la')
+errorbar_sanspol(ax_sanspol, sanspol_m_sa_q, sanspol_m_sa_I, sanspol_m_sa_sI,\
+                 'm', 'sa', sanspol_m_legend_label)
+errorbar_sanspol(ax_sanspol, sanspol_m_la_q, sanspol_m_la_I, sanspol_m_la_sI,\
+                 'm', 'la')
+
+model_sanspol(ax_sanspol, sanspol_p_sa_q, sanspol_p_sa_Imodel, 'p', 'sa')
+model_sanspol(ax_sanspol, sanspol_p_la_q, sanspol_p_la_Imodel, 'p', 'la')
+model_sanspol(ax_sanspol, sanspol_m_sa_q, sanspol_m_sa_Imodel, 'm', 'sa')
+model_sanspol(ax_sanspol, sanspol_m_la_q, sanspol_m_la_Imodel, 'm', 'la')
+
+setup_ax(ax_sanspol, sans_q_min, sans_q_max, sans_I_min, sans_I_max)
+plt.savefig(sanspol_pngfile)
