@@ -1,3 +1,9 @@
+#Initialized ScriptFactory v0.2
+#Date: 2018-05-17 13:18:02.855070
+#Author(s)/Contact:
+#Dominique Dresen	 Dominique.Dresen@uni-koeln.de
+
+#Preparing Script for Experiment: EM
 import sys, os
 thesisimgs = os.environ['phdthesisimgs']
 cwd = sys.path[0]
@@ -5,23 +11,44 @@ import matplotlib.pyplot as plt
 plt.style.use('phdthesis')
 
 from EM.tem import TEMCubes
+import numpy as np
 
 filepath = "{{tem_lenghts}}"
 sample_name = "{{sample_name}}"
-
+left_xlim, right_xlim = 6, 18
 tem = TEMCubes()
 tem.Nbins = 15
-lengths = tem.load_xls(filepath)
+lengths = tem.load_csv(filepath)
 lengths *= 0.9049 # calibration correction factor
 tem.load(lengths)
 
 tem.prepare_length_histogram()
 tem.fit_lognormal(11, 0.1)
-tem.plot_lognormal(sample_name+"_size_dist.png")
 tem.export_fit_result(sample_name+"_size_dist.xy")
 
 
-tem.prepare_aspect_histogram()
-tem.fit_gaussian(1, 0.1)
-tem.plot_gaussian(sample_name+"_aspect_dist.png", mu_unit="", sigma_unit="")
-tem.export_fit_result(sample_name+"_aspect_dist.xy")
+#Plot Fit:
+fig = plt.figure()
+ax = fig.add_subplot(111)
+
+ax.errorbar(tem.bins, tem.counts, tem.errors, color='darkgreen', ls='None')
+ax.hist(tem.raw_data, bins=tem.Nbins, alpha=0.7, facecolor='green')
+
+x_for_fit_display = np.linspace(left_xlim, right_xlim, 100)
+ax.plot(x_for_fit_display,\
+  tem.lognormal(tem.p_result, x_for_fit_display),\
+  color='black', marker='None',\
+  label=\
+    "$\mu_{log}\,=\,"+\
+      "{:.1f}".format(tem.p_result["logmu"].value)+\
+      "\, nm$\n"+
+    "$\sigma_{log}\,=\,"+\
+      "{:.1f}".format(tem.p_result["logstd"].value*100)+\
+      "\, \%$")
+
+ax.set_xlabel(tem.xlabel)
+ax.set_ylabel("$counts$")
+ax.set_xlim([left_xlim, right_xlim])
+ax.legend(loc='upper right')
+fig.tight_layout()
+fig.savefig(sample_name+'_size_dist.png', bbox_inches='tight')
