@@ -1,0 +1,32 @@
+import sys, os
+thesisimgs = os.environ['phdthesisimgs']
+cwd = sys.path[0]
+import matplotlib.pyplot as plt
+plt.style.use('phdthesis')
+
+import numpy as np
+from utils.fileformats import load_xyem
+
+datfile = '{{datfile}}'
+savefile = '{{savefile}}'
+
+B, M, sM, Mmodel = load_xyem(datfile)
+
+fig = plt.figure()
+left, bottom = 0.2, 0.17
+ax = fig.add_axes([left,bottom, 1-left-0.01, 1-bottom-0.01])
+
+ax.axhline(0, color='lightgray', marker='None', zorder=0)
+ax.axvline(0, color='lightgray', marker='None', zorder=0)
+ax.errorbar(B, M, sM, linestyle='None', marker='.', zorder=1,\
+            label='Dispersion\n$\mathit{T} \,=\, 300 \,K$')
+ax.plot(B, Mmodel, marker='None', zorder=2, label='Langevin', color='black')
+ax.set_xlabel("$\mathit{\mu_0 H} \, / \, T$")
+ax.set_ylabel("$\mathit{M} \, / \, kAm^{-1}$")
+
+
+ax.set_xlim(-9.1, 9.1)
+ax.set_ylim(-420, 420)
+ax.legend(loc='upper left')
+plt.savefig(savefile)
+plt.show()
