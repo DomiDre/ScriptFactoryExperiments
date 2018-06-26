@@ -1,0 +1,27 @@
+from modelexp import App
+from modelexp.experiments.sas import Saxs
+from modelexp.models.sas import Sphere
+from modelexp.data import XyeData
+from modelexp.fit import LevenbergMarquardt
+
+datafile = '{{datafileName}}'
+
+app = App()
+
+app.setExperiment(Saxs)
+
+dataRef = app.setData(XyeData)
+dataRef.loadFromFile('{{datafileName}}')
+dataRef.plotData()
+
+modelRef = app.setModel(Sphere)
+modelRef.setParam("R", 50,  minVal = 0, maxVal = 100, vary = True)
+modelRef.setParam("SLDsphere", 4.5e-05,  minVal = 0, maxVal = 0.00045000000000000004, vary = False)
+modelRef.setParam("SLDsolvent", 1e-05,  minVal = 0, maxVal = 0.0001, vary = False)
+modelRef.setParam("sigR", 0.05,  minVal = 0, maxVal = 0.2, vary = True)
+modelRef.setParam("I0", 0.2,  minVal = 0, maxVal = 1, vary = True)
+modelRef.setParam("bg", 0.0,  minVal = 0, maxVal = 1, vary = False)
+
+app.setFit(LevenbergMarquardt)
+
+app.show()

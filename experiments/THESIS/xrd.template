@@ -1,0 +1,42 @@
+import sys, os
+thesisimgs = os.environ['phdthesisimgs']
+cwd = sys.path[0]
+import matplotlib.pyplot as plt
+plt.style.use('phdthesis')
+
+# remove some annoying warnings
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning, module='matplotlib')
+
+import numpy as np
+from utils.fileformats import load_xy
+
+datfile = '{{datfile}}'
+
+sample_name = '{{sampleName}}'
+
+savefile = thesisimgs+'{{Chapter}}_XRD_'+sample_name
+
+legend_label = "XRD"
+
+tth, I = load_xy(datfile)
+max_I = max(I)
+I /= max_I
+
+wavelength = 1.5406
+q = 4*np.pi/wavelength *np.sin(tth/2 *np.pi/180)
+min_q, max_q = min(q), max(q)
+min_I, max_I = 0.2, 1.1
+
+# Plot
+fig = plt.figure()
+left, bottom = 0.21, 0.17
+ax = fig.add_axes([left,bottom, 1-left-0.01, 1-bottom-0.01])
+
+ax.plot(q, I, label=legend_label, marker='None', linestyle='-')
+ax.set_xlabel('$\mathit{q} \, / \, \AA^{-1}$')
+ax.set_ylabel('$\mathit{I} \, / \, a.u.$')
+ax.set_xlim([min_q, max_q])
+ax.set_ylim([min_I, max_I])
+ax.legend(loc='upper right')
+fig.savefig(savefile)

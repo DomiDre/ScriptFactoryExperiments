@@ -8,25 +8,30 @@ import numpy as np
 from utils.fileformats import load_xyem
 
 datfile = '{{datfile}}'
-savefile = '{{savefile}}'
+
+sample_name = '{{sampleName}}'
+
+savefile = thesisimgs+'{{Chapter}}_VSM_'+sample_name
 
 B, M, sM, Mmodel = load_xyem(datfile)
 
+min_B, max_B = min(B), max(B)
+min_M, max_M = -420, 420
+T = 300
+
 fig = plt.figure()
-left, bottom = 0.2, 0.17
+left, bottom = 0.21, 0.16
 ax = fig.add_axes([left,bottom, 1-left-0.01, 1-bottom-0.01])
 
 ax.axhline(0, color='lightgray', marker='None', zorder=0)
 ax.axvline(0, color='lightgray', marker='None', zorder=0)
 ax.errorbar(B, M, sM, linestyle='None', marker='.', zorder=1,\
-            label='Dispersion\n$\mathit{T} \,=\, 300 \,K$')
+            label='Dispersion\n$\mathit{T} \,=\, '+str(T)+' \,K$', capsize=0)
 ax.plot(B, Mmodel, marker='None', zorder=2, label='Langevin', color='black')
 ax.set_xlabel("$\mathit{\mu_0 H} \, / \, T$")
 ax.set_ylabel("$\mathit{M} \, / \, kAm^{-1}$")
 
-
-ax.set_xlim(-9.1, 9.1)
-ax.set_ylim(-420, 420)
+ax.set_xlim(min_B, max_B)
+ax.set_ylim(min_M, max_M)
 ax.legend(loc='upper left')
 plt.savefig(savefile)
-plt.show()
