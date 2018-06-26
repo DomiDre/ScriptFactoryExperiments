@@ -5,7 +5,8 @@ import matplotlib.pyplot as plt
 plt.style.use('phdthesis')
 
 import numpy as np
-from utils.fileformats import load_xyem
+
+from modelexp.data import XyemData
 
 datfile = '{{datfile}}'
 
@@ -13,7 +14,9 @@ sample_name = '{{sampleName}}'
 
 savefile = thesisimgs+'{{Chapter}}_VSM_'+sample_name
 
-B, M, sM, Mmodel = load_xyem(datfile)
+data = XyemData()
+data.loadFromFile(datfile)
+B, M, sM, Mmodel = data.getData()
 
 min_B, max_B = min(B), max(B)
 min_M, max_M = -420, 420

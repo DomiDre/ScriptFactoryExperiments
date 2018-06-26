@@ -11,7 +11,7 @@ app = App()
 app.setExperiment(Saxs)
 
 dataRef = app.setData(XyeData)
-dataRef.loadFromFile('{{datafileName}}')
+dataRef.loadFromFile(datafile)
 dataRef.plotData()
 
 modelRef = app.setModel(Sphere)
