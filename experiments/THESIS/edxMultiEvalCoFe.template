@@ -9,7 +9,7 @@ import warnings
 warnings.filterwarnings("ignore", category=UserWarning, module='matplotlib')
 
 import numpy as np
-from utils.fileformats import load_xy, load_edx_htm
+from thesis_utils.fileformats import load_xy, load_edx_htm
 from PlottingTemplates.edx import *
 from EDX.edx import *
 from math import floor, log10

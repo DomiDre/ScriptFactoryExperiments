@@ -9,7 +9,7 @@ import warnings
 warnings.filterwarnings("ignore", category=UserWarning, module='matplotlib')
 
 import numpy as np
-from utils.fileformats import load_xy
+from modelexp.data import XyData
 
 datfile = '{{datfile}}'
 
@@ -19,7 +19,10 @@ savefile = thesisimgs+'{{Chapter}}_XRD_'+sample_name
 
 legend_label = "XRD"
 
-tth, I = load_xy(datfile)
+data = XyData()
+data.loadFromFile(datfile)
+tth, I = data.getData()
+
 max_I = max(I)
 I /= max_I
 

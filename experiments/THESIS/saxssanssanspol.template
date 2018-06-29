@@ -6,7 +6,7 @@ plt.style.use('phdthesis')
 
 import numpy as np
 import warnings
-from utils.fileformats import load_saxs_sans_sanspol, load_xyem
+from thesis_utils.fileformats import load_saxs_sans_sanspol, load_xyem
 from PlottingTemplates.saxssanssanspol import *
 # remove some annoying warnings
 warnings.filterwarnings("ignore", category=UserWarning, module='matplotlib')
