@@ -12,7 +12,7 @@ datfile = '{{datfile}}'
 
 sample_name = '{{sampleName}}'
 
-savefile = thesisimgs+'{{Chapter}}_VSM_'+sample_name
+savefile = '{{Chapter}}_VSM_'+sample_name
 
 data = XyemData()
 data.loadFromFile(datfile)
@@ -29,7 +29,7 @@ ax = fig.add_axes([left,bottom, 1-left-0.01, 1-bottom-0.01])
 ax.axhline(0, color='lightgray', marker='None', zorder=0)
 ax.axvline(0, color='lightgray', marker='None', zorder=0)
 ax.errorbar(B, M, sM, linestyle='None', marker='.', zorder=1,\
-            label=r'Dispersion\n$\mathit{T} \,=\, '+str(T)+r' \,K$', capsize=0)
+            label='Dispersion\n$\mathit{T} \,=\, '+str(T)+r' \,K$', capsize=0)
 ax.plot(B, Mmodel, marker='None', zorder=2, label='Langevin', color='black')
 ax.set_xlabel(r"$\mathit{\mu_0 H} \, / \, T$")
 ax.set_ylabel(r"$\mathit{M} \, / \, kAm^{-1}$")
@@ -38,3 +38,4 @@ ax.set_xlim(min_B, max_B)
 ax.set_ylim(min_M, max_M)
 ax.legend(loc='upper left')
 plt.savefig(savefile)
+plt.savefig(thesisimgs+savefile)
