@@ -15,13 +15,13 @@ class ScriptFactory():
 
   def run_factory(self):
     self.log_header() #Initialize header and put into log
-    
+
     self.get_arguments() # Get arguments from CL as well as the savepath
-  
+
     # Generate Experiment object.
     self.experiment = Experiment(self, self.additional_arguments)
-    
-    # Read desired template and save to file    
+
+    # Read desired template and save to file
     self.experiment.read_template()
 
     # Read or generate a name for the saved script.
@@ -48,7 +48,7 @@ class ScriptFactory():
       os.path.dirname(os.path.realpath(__file__))+'/experiments/')
     for exp in avail_experiments:
      print('\t'+exp)
-  
+
   def get_available_templates(self):
     print('Available Templates are:')
     available_files = os.listdir(self.experiment_path)
@@ -58,7 +58,7 @@ class ScriptFactory():
         available_templates.append(f.split('.template')[0])
     for template in available_templates:
      print('\t'+template)
-  
+
 
   def get_arguments(self):
     # Get arguments from CL
@@ -90,8 +90,8 @@ class ScriptFactory():
     if self.N_experiment_args >= 2 and\
         self.additional_arguments[-1].endswith('.py'):
       self.save_template_to = self.additional_arguments[-1]
-    
-    # Otherwise propose one from experiment & template name 
+
+    # Otherwise propose one from experiment & template name
     else:
       self.save_template_to = self.arg_experiment+'_'+\
                   self.passed_args[2]+'.py'
