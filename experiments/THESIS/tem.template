@@ -4,7 +4,7 @@ cwd = sys.path[0]
 import matplotlib.pyplot as plt
 plt.style.use('phdthesis')
 
-from EM.tem import TEM
+import uzkChemTem
 
 temFilepath = cwd+"/{{tiffile}}"
 chapter = '{{Chapter}}'
@@ -12,10 +12,6 @@ sample_name = '{{sampleName}}'
 
 savefile = chapter+'_TEM_'+sample_name
 
-temFFT = TEM()
-temFFT.load_tif_file(temFilepath)
-
-temFFT.pretty_plot(0, 0, 2048, 2048, 50)
-
-temFFT.fig.savefig(savefile, bbox_inches='tight')
-temFFT.fig.savefig(thesisimgs+savefile, bbox_inches='tight')
+fig, ax = uzkChemTem.pretty_plot(temFilepath)
+fig.savefig(cwd+'/'+savefile, bbox_inches='tight')
+fig.savefig(thesisimgs+'/'+savefile, bbox_inches='tight')
